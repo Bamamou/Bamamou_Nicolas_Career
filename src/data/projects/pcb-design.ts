@@ -42,17 +42,17 @@ export const pcbDesign: Project = {
   links: [
     {
       title: 'Documentation',
-      url: '../projects/pcb-design/documentation.html',
+      url: '../projects/pcb-design/esp32_board_doc_html.html',
       icon: FileText
     },
     {
       title: 'Interactive BOM',
-      url: '../projects/pcb-design/ibom.html',
+      url: '../projects/pcb-design/ESP32_CAN ibom.html',
       icon: FileSpreadsheet
     },
     {
       title: 'Schematic',
-      url: '../projects/pcb-design/schematic.html',
+      url: '../projects/pcb-design/ESP32-CAN-protected.pdf',
       icon: Code
     }
   ],

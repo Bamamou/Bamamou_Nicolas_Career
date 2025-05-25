@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECU GEN 3 - Firmware Developer Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --code-bg: #1e1e2e;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.7;
+            scroll-behavior: smooth;
+        }
+
+        .hero {
+            background: var(--gradient-1);
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero .subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .nav-sticky {
+            position: sticky;
+            top: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 100;
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .main-content {
+            padding: 3rem 0;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-3);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .section h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card h3 {
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .card h4 {
+            color: var(--success-color);
+            font-size: 1.25rem;
+            margin: 1.5rem 0 1rem 0;
+            font-weight: 600;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-color);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--gradient-2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem auto;
+            font-size: 2rem;
+        }
+
+        .code-block {
+            background: var(--code-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid var(--accent-color);
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block code {
+            color: #a9b1d6;
+            font-family: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .code-header {
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px 8px 0 0;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin: -1.5rem -1.5rem 1rem -1.5rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--secondary-color);
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        tr:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .spec-item {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .spec-label {
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .spec-value {
+            color: var(--text-secondary);
+        }
+
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--warning-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .warning-box::before {
+            content: "⚠️";
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+
+        .info-box {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid var(--accent-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .info-box::before {
+            content: "ℹ️";
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+
+        .success-box {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .success-box::before {
+            content: "✅";
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+
+        .footer {
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 0 2rem 0;
+            margin-top: 4rem;
+            text-align: center;
+        }
+
+        .toc {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .toc h3 {
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .toc-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .toc-list a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .toc-list a:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent-color);
+            transform: translateX(4px);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .specs-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="hero-content">
+            <h1>ECU GEN 3</h1>
+            <p class="subtitle">Comprehensive Firmware Developer Documentation</p>
+            <div class="version-badge">Version 0.1 • March 2025</div>
+        </div>
+    </div>
+
+    <nav class="nav-sticky">
+        <div class="container">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <strong>ECU Documentation</strong>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#overview">Overview</a></li>
+                    <li><a href="#power">Power</a></li>
+                    <li><a href="#controller">Controller</a></li>
+                    <li><a href="#can">CAN Bus</a></li>
+                    <li><a href="#adc">ADC</a></li>
+                    <li><a href="#development">Development</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="toc">
+                <h3>📋 Table of Contents</h3>
+                <ul class="toc-list">
+                    <li><a href="#overview">System Overview</a></li>
+                    <li><a href="#power">Power Supply System</a></li>
+                    <li><a href="#controller">ESP32 Controller</a></li>
+                    <li><a href="#can">CAN Bus Interface</a></li>
+                    <li><a href="#adc">Analog Input System</a></li>
+                    <li><a href="#flash">External Flash Memory</a></li>
+                    <li><a href="#relay">Relay Control</a></li>
+                    <li><a href="#usb">USB-UART Bridge</a></li>
+                    <li><a href="#connector">Connector Pinout</a></li>
+                    <li><a href="#development">Development Guidelines</a></li>
+                    <li><a href="#debug">Test Points & Debug</a></li>
+                    <li><a href="#safety">Safety & Compliance</a></li>
+                </ul>
+            </div>
+
+            <section id="overview" class="section">
+                <div class="section-header">
+                    <div class="section-icon">🔧</div>
+                    <h2>System Overview</h2>
+                </div>
+                
+                <div class="card">
+                    <p>The ECU or VCU GEN 3 is a comprehensive automotive Electronic Control Unit built around the ESP32-WROOM-32E-N16 microcontroller. The system provides CAN bus communication, multiple analog inputs, relay control, and various power management features suitable for automotive applications.</p>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🧠</div>
+                        <h4>ESP32 Core</h4>
+                        <p>Dual-core processor with Wi-Fi and Bluetooth capabilities</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🚗</div>
+                        <h4>CAN Bus</h4>
+                        <p>MCP2515 controller with TJA1050 transceiver</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h4>16-bit ADC</h4>
+                        <p>4-channel ADS1115 for precise analog measurements</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💾</div>
+                        <h4>External Flash</h4>
+                        <p>32Mbit W25Q32 SPI flash memory</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h4>Power Management</h4>
+                        <p>12V to 5V and 3.3V regulation with protection</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔗</div>
+                        <h4>Connectivity</h4>
+                        <p>USB, UART, I2C, and SPI interfaces</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="power" class="section">
+                <div class="section-header">
+                    <div class="section-icon">⚡</div>
+                    <h2>Power Supply System</h2>
+                </div>
+
+                <div class="card">
+                    <h3>Input Power & Protection</h3>
+                    <div class="specs-grid">
+                        <div class="spec-item">
+                            <div class="spec-label">Primary Input</div>
+                            <div class="spec-value">12V Automotive Power</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Overvoltage Protection</div>
+                            <div class="spec-value">SMBJ20A TVS Diode</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Reverse Protection</div>
+                            <div class="spec-value">IRF9540NS P-Channel MOSFET</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Regulation</div>
+                            <div class="spec-value">BZT52C9V1 Zener Diode</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Voltage Rails</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Rail</th>
+                                    <th>Regulator</th>
+                                    <th>Input</th>
+                                    <th>Output</th>
+                                    <th>Max Current</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>+12V</td>
+                                    <td>Direct (Protected)</td>
+                                    <td>12V</td>
+                                    <td>12V</td>
+                                    <td>System Limited</td>
+                                </tr>
+                                <tr>
+                                    <td>+5V</td>
+                                    <td>TPS5420D Switching</td>
+                                    <td>12V</td>
+                                    <td>5V</td>
+                                    <td>2A</td>
+                                </tr>
+                                <tr>
+                                    <td>+3.3V</td>
+                                    <td>LM1117MPX-3.3 Linear</td>
+                                    <td>5V</td>
+                                    <td>3.3V</td>
+                                    <td>800mA</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Power Monitoring</h3>
+                    <div class="info-box">
+                        <strong>12V Monitor Circuit:</strong> Voltage divider with 68kΩ and 12kΩ resistors provides scaled feedback to ESP32 ADC.
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">Voltage Calculation Formula</div>
+                        <code>
+V_ADC = V_12V × (12kΩ / (68kΩ + 12kΩ)) = V_12V × 0.15
+ADC Range: 0-3.3V corresponds to 0-22V input range
+                        </code>
+                    </div>
+                </div>
+            </section>
+
+            <section id="controller" class="section">
+                <div class="section-header">
+                    <div class="section-icon">🧠</div>
+                    <h2>ESP32-WROOM-32E-N16 Controller</h2>
+                </div>
+
+                <div class="card">
+                    <h3>Microcontroller Specifications</h3>
+                    <div class="specs-grid">
+                        <div class="spec-item">
+                            <div class="spec-label">CPU</div>
+                            <div class="spec-value">Dual-core Xtensa LX6, up to 240MHz</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Flash Memory</div>
+                            <div class="spec-value">16MB External Flash</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">RAM</div>
+                            <div class="spec-value">520KB SRAM</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Connectivity</div>
+                            <div class="spec-value">Wi-Fi 802.11 b/g/n, Bluetooth v4.2</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Operating Voltage</div>
+                            <div class="spec-value">3.3V</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Temperature Range</div>
+                            <div class="spec-value">-40°C to +85°C</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>GPIO Pin Assignments</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Interface</th>
+                                    <th>GPIO Pin</th>
+                                    <th>Function</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td rowspan="4">SPI Flash</td>
+                                    <td>IO6</td>
+                                    <td>SPI_FLASH_CLK</td>
+                                    <td>Serial Clock</td>
+                                </tr>
+                                <tr>
+                                    <td>IO7</td>
+                                    <td>SPI_FLASH_MOSI</td>
+                                    <td>Master Out, Slave In</td>
+                                </tr>
+                                <tr>
+                                    <td>IO8</td>
+                                    <td>SPI_FLASH_MISO</td>
+                                    <td>Master In, Slave Out</td>
+                                </tr>
+                                <tr>
+                                    <td>IO5</td>
+                                    <td>SPI_FLASH_CS</td>
+                                    <td>Chip Select</td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="4">CAN SPI</td>
+                                    <td>IO18</td>
+                                    <td>CAN_CSK</td>
+                                    <td>SPI Clock</td>
+                                </tr>
+                                <tr>
+                                    <td>IO23</td>
+                                    <td>CAN_MOSI</td>
+                                    <td>SPI MOSI</td>
+                                </tr>
+                                <tr>
+                                    <td>IO19</td>
+                                    <td>CAN_MISO</td>
+                                    <td>SPI MISO</td>
+                                </tr>
+                                <tr>
+                                    <td>IO5</td>
+                                    <td>CAN_CS</td>
+                                    <td>SPI Chip Select</td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="2">I2C</td>
+                                    <td>IO22</td>
+                                    <td>I2C_SCL</td>
+                                    <td>Clock Line (4.7kΩ pullup)</td>
+                                </tr>
+                                <tr>
+                                    <td>IO21</td>
+                                    <td>I2C_SDA</td>
+                                    <td>Data Line (4.7kΩ pullup)</td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="4">UART</td>
+                                    <td>IO1</td>
+                                    <td>TXD0</td>
+                                    <td>Debug/Programming TX</td>
+                                </tr>
+                                <tr>
+                                    <td>IO3</td>
+                                    <td>RXD0</td>
+                                    <td>Debug/Programming RX</td>
+                                </tr>
+                                <tr>
+                                    <td>IO17</td>
+                                    <td>TXD1</td>
+                                    <td>External UART TX (5V level)</td>
+                                </tr>
+                                <tr>
+                                    <td>IO16</td>
+                                    <td>RXD1</td>
+                                    <td>External UART RX (5V level)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Auto-Programming Circuit</h3>
+                    <div class="success-box">
+                        The ECU features an automatic programming circuit using BSS138 MOSFETs and UMH3N transistor array for seamless firmware updates via USB without manual intervention.
+                    </div>
+                </div>
+            </section>
+
+            <section id="can" class="section">
+                <div class="section-header">
+                    <div class="section-icon">🚗</div>
+                    <h2>CAN Bus Interface</h2>
+                </div>
+
+                <div class="card">
+                    <h3>CAN Controller - MCP2515T-I/SO</h3>
+                    <div class="specs-grid">
+                        <div class="spec-item">
+                            <div class="spec-label">Interface</div>
+                            <div class="spec-value">SPI to ESP32</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Crystal</div>
+                            <div class="spec-value">8MHz External</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Operating Voltage</div>
+                            <div class="spec-value">3.3V</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Protocol Support</div>
+                            <div class="spec-value">CAN 2.0B</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>CAN Transceiver - TJA1050T</h3>
+                    <div class="specs-grid">
+                        <div class="spec-item">
+                            <div class="spec-label">Interface</div>
+                            <div class="spec-value">Differential CAN Bus</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Operating Voltage</div>
+                            <div class="spec-value">5V</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Data Rate</div>
+                            <div class="spec-value">Up to 1Mbps</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Termination</div>
+                            <div class="spec-value">120Ω Built-in</div>
+                        </div>
+                    </div>
+
+                    <div class="warning-box">
+                        <strong>Protection Features:</strong> PESD1CAN ESD protection diode and 560pF EMI filtering capacitors on CAN lines ensure robust automotive operation.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>CAN Implementation Example</h3>
+                    <div class="code-block">
+                        <div class="code-header">C Structure Definition</div>
+                        <code>
+// CAN configuration structure
+struct can_config {
+    uint32_t bitrate;        // 125k, 250k, 500k, 1000k bps
+    uint8_t sjw;            // Sync Jump Width (1-4)
+    uint8_t sample_point;   // Sample point percentage
+    bool loopback;          // Loopback mode for testing
+    bool listen_only;       // Listen-only mode
+};
+
+// Initialize CAN with 500kbps
+struct can_config config = {
+    .bitrate = 500000,
+    .sjw = 1,
+    .sample_point = 75,
+    .loopback = false,
+    .listen_only = false
+};
+                        </code>
+                    </div>
+                </div>
+            </section>
+
+            <section id="adc" class="section">
+                <div class="section-header">
+                    <div class="section-icon

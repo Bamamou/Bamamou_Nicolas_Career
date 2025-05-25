@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32-CAN ECU Gen2 Board Documentation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 8px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        
+        h3 {
+            color: #2c3e50;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        h4 {
+            color: #34495e;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            background-color: white;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e8f4f8;
+        }
+        
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .warning::before {
+            content: "⚠️ ";
+            font-weight: bold;
+            color: #f39c12;
+        }
+        
+        .info-box {
+            background-color: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .spec-list {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        
+        ul {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        code {
+            background-color: #f1f2f6;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .gpio-table {
+            font-size: 0.9em;
+        }
+        
+        .print-break {
+            page-break-before: always;
+        }
+        
+        @media print {
+            body {
+                background-color: white;
+                color: black;
+            }
+            .container {
+                box-shadow: none;
+                padding: 20px;
+            }
+            .warning {
+                border-color: #000;
+                background-color: #f0f0f0;
+            }
+        }
+        
+        .header-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .voltage-table {
+            background-color: #e8f5e8;
+        }
+        
+        .pin-table {
+            font-size: 0.85em;
+        }
+        
+        .checklist {
+            background-color: #f0f8ff;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        
+        .checklist ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .checklist li::before {
+            content: "☐ ";
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ESP32-CAN ECU Gen2 Board Documentation</h1>
+        
+        <div class="header-info">
+            <div>
+                <h3>Project Information</h3>
+                <p><strong>Project:</strong> ECU Gen2 - Evoke Motorcycles<br>
+                <strong>Revision:</strong> 2.3.3.4<br>
+                <strong>Date:</strong> 2023-05-25</p>
+            </div>
+            <div>
+                <h3>Hardware Specifications</h3>
+                <p><strong>MCU:</strong> ESP32-WROOM-32D<br>
+                <strong>Application:</strong> Motorcycle Engine Control Unit<br>
+                <strong>Communication:</strong> CAN Bus</p>
+            </div>
+        </div>
+
+        <h2>System Architecture</h2>
+        <p>The board is organized into six main subsystems:</p>
+        <ol>
+            <li>Power Supply Management</li>
+            <li>ESP32 Microcontroller Core</li>
+            <li>CAN Bus Communication</li>
+            <li>I2C Expansion and Digital I/O</li>
+            <li>SPI Flash Memory and IMU Sensor</li>
+            <li>FRAM/EEPROM Storage and Real-Time Clock</li>
+        </ol>
+
+        <h2>Pin Mapping and GPIO Allocation</h2>
+        
+        <h3>ESP32 GPIO Assignment</h3>
+        <table class="gpio-table pin-table">
+            <thead>
+                <tr>
+                    <th>GPIO</th>
+                    <th>Function</th>
+                    <th>Direction</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>IO0</td><td>Boot Mode Control</td><td>Input</td><td>Pull-up, Auto-flash circuit</td></tr>
+                <tr><td>IO1</td><td>TXD0 (Debug UART)</td><td>Output</td><td>USB-UART bridge</td></tr>
+                <tr><td>IO2</td><td>Internal (Flash)</td><td>I/O</td><td>Must be LOW for normal boot</td></tr>
+                <tr><td>IO3</td><td>RXD0 (Debug UART)</td><td>Input</td><td>USB-UART bridge</td></tr>
+                <tr><td>IO4</td><td>HSPI_CS2</td><td>Output</td><td>Secondary SPI chip select</td></tr>
+                <tr><td>IO5</td><td>VSPI_CS1</td><td>Output</td><td>Primary VSPI chip select</td></tr>
+                <tr><td>IO12</td><td>HSPI_MISO</td><td>Input</td><td>Must be LOW for normal boot</td></tr>
+                <tr><td>IO13</td><td>HSPI_MOSI</td><td>Output</td><td>SPI Flash communication</td></tr>
+                <tr><td>IO14</td><td>HSPI_CLK</td><td>Output</td><td>SPI Clock</td></tr>
+                <tr><td>IO15</td><td>HSPI_CS1</td><td>Output</td><td>MPU9250 chip select</td></tr>
+                <tr><td>IO16</td><td>RXD2</td><td>Input</td><td>UART2 receive (5V level)</td></tr>
+                <tr><td>IO17</td><td>TXD2</td><td>Output</td><td>UART2 transmit (5V level)</td></tr>
+                <tr><td>IO18</td><td>VSPI_CLK</td><td>Output</td><td>VSPI clock</td></tr>
+                <tr><td>IO19</td><td>VSPI_MISO</td><td>Input</td><td>VSPI data in</td></tr>
+                <tr><td>IO21</td><td>I2C_SDA</td><td>I/O</td><td>I2C data line</td></tr>
+                <tr><td>IO22</td><td>I2C_SCL</td><td>Output</td><td>I2C clock line</td></tr>
+                <tr><td>IO23</td><td>VSPI_MOSI</td><td>Output</td><td>VSPI data out</td></tr>
+                <tr><td>IO25</td><td>CAN2_RXD</td><td>Input</td><td>Secondary CAN receive</td></tr>
+                <tr><td>IO26</td><td>CAN2_TXD</td><td>Output</td><td>Secondary CAN transmit</td></tr>
+                <tr><td>IO27</td><td>Speed Sensor</td><td>Input</td><td>Motorcycle speed input</td></tr>
+                <tr><td>IO32</td><td>RXD1</td><td>Input</td><td>UART1 receive (5V level)</td></tr>
+                <tr><td>IO33</td><td>TXD1</td><td>Output</td><td>UART1 transmit (5V level)</td></tr>
+                <tr><td>IO34</td><td>12V Monitor</td><td>Input</td><td>Battery voltage monitoring</td></tr>
+                <tr><td>IO35</td><td>MPU9250_INT</td><td>Input</td><td>IMU interrupt signal</td></tr>
+                <tr><td>SENSOR_VP</td><td>IO_EX_INT</td><td>Input</td><td>I2C expander interrupt</td></tr>
+                <tr><td>SENSOR_VN</td><td>WP_FRAM_pin</td><td>Output</td><td>FRAM write protect</td></tr>
+            </tbody>
+        </table>
+
+        <div class="warning">
+            <strong>CRITICAL BOOT CONDITIONS:</strong><br>
+            • IO0: Must be HIGH for normal operation (pulled up via 10kΩ)<br>
+            • IO2: Must be LOW for normal boot (internal pull-down)<br>
+            • IO12: Must be LOW for normal boot (external pull-down via speed sensor)<br>
+            • IO15: Must be LOW to enable debug messages (pull-down via speed sensor circuit)
+        </div>
+
+        <div class="print-break"></div>
+
+        <h2>Power Supply System</h2>
+        
+        <h3>Voltage Rails</h3>
+        <table class="voltage-table">
+            <thead>
+                <tr>
+                    <th>Rail</th>
+                    <th>Source</th>
+                    <th>Capacity</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>12V Input</td><td>Vehicle battery</td><td>-</td><td>Filtered and protected</td></tr>
+                <tr><td>5V Rail</td><td>Buck converter (TPS5420D)</td><td>2A</td><td>High efficiency switching</td></tr>
+                <tr><td>3.3V Rail</td><td>Linear regulator (LM1117M-3.3)</td><td>800mA</td><td>From 5V rail</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Power Monitoring</h3>
+        <div class="info-box">
+            <strong>12V Monitor on GPIO34:</strong><br>
+            • Voltage divider: 68kΩ/12kΩ<br>
+            • Formula: V_measured = V_12V × 0.15<br>
+            • ADC Range: 0-3.3V represents 0-22V input
+        </div>
+
+        <h3>Protection Features</h3>
+        <ul>
+            <li>Input fuses (0ZCF0100AF2A)</li>
+            <li>TVS diodes (SMBJ20A) for overvoltage protection</li>
+            <li>Reverse polarity protection (IRF9540N P-MOSFET)</li>
+        </ul>
+
+        <h2>Communication Interfaces</h2>
+
+        <h3>CAN Bus Implementation</h3>
+        
+        <h4>Primary CAN Controller (MCP2515)</h4>
+        <table>
+            <thead>
+                <tr><th>Signal</th><th>Connection</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>CS</td><td>CAN_CS</td><td>SPI chip select</td></tr>
+                <tr><td>MOSI</td><td>CAN_MOSI</td><td>SPI data out</td></tr>
+                <tr><td>MISO</td><td>CAN_MISO</td><td>SPI data in</td></tr>
+                <tr><td>SCK</td><td>CAN_SCK</td><td>SPI clock</td></tr>
+                <tr><td>Physical Layer</td><td>TJA1050</td><td>CAN transceiver</td></tr>
+                <tr><td>Termination</td><td>120Ω</td><td>Bus termination</td></tr>
+                <tr><td>Crystal</td><td>8MHz</td><td>External oscillator</td></tr>
+            </tbody>
+        </table>
+
+        <h4>Embedded CAN (ESP32 Internal)</h4>
+        <table>
+            <thead>
+                <tr><th>Signal</th><th>GPIO</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>RX</td><td>GPIO25</td><td>CAN2_RXD</td></tr>
+                <tr><td>TX</td><td>GPIO26</td><td>CAN2_TXD</td></tr>
+                <tr><td>Transceiver</td><td>TJA1050</td><td>Secondary CAN bus</td></tr>
+                <tr><td>Termination</td><td>120Ω</td><td>Bus termination</td></tr>
+            </tbody>
+        </table>
+
+        <h3>UART Interfaces</h3>
+        
+        <table>
+            <thead>
+                <tr><th>UART</th><th>RX GPIO</th><th>TX GPIO</th><th>Level</th><th>Purpose</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>UART0</td><td>GPIO3</td><td>GPIO1</td><td>3.3V</td><td>Debug/Programming (CH340C)</td></tr>
+                <tr><td>UART1</td><td>GPIO32</td><td>GPIO33</td><td>5V</td><td>External Communication</td></tr>
+                <tr><td>UART2</td><td>GPIO16</td><td>GPIO17</td><td>5V</td><td>External Communication</td></tr>
+            </tbody>
+        </table>
+
+        <div class="info-box">
+            <strong>Level Shifting:</strong> UART1 and UART2 use BSS138 MOSFETs for 3.3V to 5V level conversion with MM1Z3V0 Zener diode protection.
+        </div>
+
+        <h3>I2C Bus</h3>
+        <ul>
+            <li><strong>SDA:</strong> GPIO21</li>
+            <li><strong>SCL:</strong> GPIO22</li>
+            <li><strong>Pull-ups:</strong> 4.7kΩ resistors</li>
+            <li><strong>Connected Devices:</strong>
+                <ul>
+                    <li>MCP23017 I/O Expanders (2 units)</li>
+                    <li>DS3231M Real-Time Clock</li>
+                    <li>MB85RC256V FRAM Memory</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3>SPI Interfaces</h3>
+        
+        <table>
+            <thead>
+                <tr><th>Bus</th><th>MISO</th><th>MOSI</th><th>CLK</th><th>CS Pins</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>HSPI</td><td>GPIO12</td><td>GPIO13</td><td>GPIO14</td><td>GPIO15 (MPU9250), GPIO4</td></tr>
+                <tr><td>VSPI</td><td>GPIO19</td><td>GPIO23</td><td>GPIO18</td><td>GPIO5</td></tr>
+            </tbody>
+        </table>
+
+        <div class="print-break"></div>
+
+        <h2>Sensor and Peripheral Integration</h2>
+
+        <h3>Inertial Measurement Unit (MPU9250)</h3>
+        <div class="spec-list">
+            <ul>
+                <li><strong>Interface:</strong> SPI (HSPI)</li>
+                <li><strong>Chip Select:</strong> GPIO15</li>
+                <li><strong>Interrupt:</strong> GPIO35</li>
+                <li><strong>Supply:</strong> 3.3V</li>
+                <li><strong>Features:</strong> 9-DOF (3-axis gyro, accelerometer, magnetometer)</li>
+            </ul>
+        </div>
+
+        <h3>SPI Flash Memory (W25M512JVEIQ)</h3>
+        <div class="spec-list">
+            <ul>
+                <li><strong>Interface:</strong> SPI (HSPI)</li>
+                <li><strong>Chip Select:</strong> SPI_FLASH_CS</li>
+                <li><strong>Capacity:</strong> 512Mbit (64MB)</li>
+                <li><strong>Supply:</strong> 3.3V</li>
+            </ul>
+        </div>
+
+        <h3>Real-Time Clock (DS3231M)</h3>
+        <div class="spec-list">
+            <ul>
+                <li><strong>Interface:</strong> I2C</li>
+                <li><strong>Features:</strong> Temperature-compensated crystal oscillator</li>
+                <li><strong>Battery Backup:</strong> CR2032 coin cell</li>
+                <li><strong>Accuracy:</strong> ±2ppm (±1 minute/year)</li>
+            </ul>
+        </div>
+
+        <h3>FRAM Memory (MB85RC256V)</h3>
+        <div class="spec-list">
+            <ul>
+                <li><strong>Interface:</strong> I2C</li>
+                <li><strong>Capacity:</strong> 256Kbit (32KB)</li>
+                <li><strong>Write Protect:</strong> GPIO (SENSOR_VN)</li>
+                <li><strong>Endurance:</strong> 10^14 write cycles</li>
+            </ul>
+        </div>
+
+        <h3>Battery Charger (LTC4054)</h3>
+        <div class="spec-list">
+            <ul>
+                <li><strong>Input:</strong> 5V rail</li>
+                <li><strong>Output:</strong> 3.3V for coin cell charging</li>
+                <li><strong>Current:</strong> Programmable via 220kΩ resistor</li>
+            </ul>
+        </div>
+
+        <h2>Digital I/O Expansion</h2>
+
+        <h3>I2C I/O Expanders (2× MCP23017)</h3>
+        <ul>
+            <li><strong>Total GPIO:</strong> 32 additional pins (16 per chip)</li>
+            <li><strong>Input Protection:</strong> 5.1kΩ series resistors + Zener diodes</li>
+            <li><strong>Output Drivers:</strong> ULN2003 Darlington arrays</li>
+            <li><strong>Relay Control:</strong> 2× G5LE-1 relays for high-current switching</li>
+        </ul>
+
+        <h3>Input Conditioning</h3>
+        <ul>
+            <li><strong>12V to 3.3V:</strong> Voltage dividers with protection</li>
+            <li><strong>5V Inputs:</strong> Direct connection with series resistance</li>
+            <li><strong>Protection:</strong> SMAJ20A TVS diodes and MM1Z3V0 Zener clamps</li>
+        </ul>
+
+        <h2>Programming and Debug Features</h2>
+
+        <h3>Automatic Flash Programming</h3>
+        <ul>
+            <li><strong>Boot Control:</strong> DTR/RTS signals control GPIO0 and EN pins</li>
+            <li><strong>Circuit:</strong> BSS138 MOSFET level shifters</li>
+            <li><strong>Reset:</strong> Capacitive coupling for reliable reset timing</li>
+        </ul>
+
+        <h3>Test Points</h3>
+        <ul>
+            <li><strong>Power Rails:</strong> 12V_TP, 5V_TP, 3.3V_TP, GND_TP</li>
+            <li><strong>CAN Signals:</strong> CANH_TP, CANL_TP</li>
+            <li><strong>SPI Signals:</strong> Various SPI signal test points</li>
+            <li><strong>UART Signals:</strong> RXD/TXD test points for all UARTs</li>
+        </ul>
+
+        <div class="print-break"></div>
+
+        <h2>Firmware Development Considerations</h2>
+
+        <h3>Critical Boot Sequence</h3>
+        <ol>
+            <li>Ensure GPIO0 is HIGH (normal operation) or LOW (programming mode)</li>
+            <li>GPIO2 must be LOW during boot</li>
+            <li>GPIO12 must be LOW for normal flash boot mode</li>
+            <li>GPIO15 controls debug message output</li>
+        </ol>
+
+        <h3>Pin Usage Restrictions</h3>
+        <ul>
+            <li><strong>GPIO6-11:</strong> Reserved for internal flash (DO NOT USE)</li>
+            <li><strong>GPIO1, 3:</strong> Debug UART (avoid if debug output needed)</li>
+            <li><strong>GPIO34-39:</strong> Input only (no internal pull-up/down)</li>
+        </ul>
+
+        <h3>Power Management</h3>
+        <ul>
+            <li>Monitor 12V supply via GPIO34 ADC</li>
+            <li>Implement brownout detection and recovery</li>
+            <li>Consider power sequencing for 5V peripherals</li>
+        </ul>
+
+        <h3>Communication Priority</h3>
+        <ol>
+            <li><strong>Primary CAN:</strong> Use MCP2515 for critical vehicle communications</li>
+            <li><strong>Secondary CAN:</strong> Use ESP32 internal CAN for diagnostics</li>
+            <li><strong>Debug UART:</strong> UART0 for development and diagnostics</li>
+            <li><strong>External UART:</strong> UART1/2 for auxiliary device communication</li>
+        </ol>
+
+        <h3>Storage Strategy</h3>
+        <ul>
+            <li><strong>FRAM:</strong> Use for frequently updated data (wear-leveling not needed)</li>
+            <li><strong>SPI Flash:</strong> Use for firmware updates, logs, and static data</li>
+            <li><strong>RTC:</strong> Maintain real-time clock with battery backup</li>
+        </ul>
+
+        <h3>Interrupt Handling</h3>
+        <ul>
+            <li><strong>MPU9250:</strong> Motion/orientation interrupt on GPIO35</li>
+            <li><strong>I2C Expander:</strong> Input change interrupt on SENSOR_VP</li>
+            <li><strong>CAN Controllers:</strong> Handle via polling or external interrupt pins</li>
+        </ul>
+
+        <h2>Recommended Libraries and Drivers</h2>
+
+        <h3>ESP-IDF Components</h3>
+        <ul>
+            <li><code>driver/gpio</code> - GPIO control</li>
+            <li><code>driver/spi_master</code> - SPI communication</li>
+            <li><code>driver/i2c</code> - I2C communication</li>
+            <li><code>driver/uart</code> - UART communication</li>
+            <li><code>driver/can</code> - Internal CAN controller</li>
+            <li><code>driver/adc</code> - ADC for voltage monitoring</li>
+        </ul>
+
+        <h3>Third-Party Components</h3>
+        <ul>
+            <li><strong>MCP2515:</strong> CAN controller library</li>
+            <li><strong>MPU9250:</strong> IMU sensor library</li>
+            <li><strong>DS3231:</strong> RTC library with NTP sync capability</li>
+            <li><strong>MB85RC256V:</strong> FRAM library with wear-leveling</li>
+            <li><strong>MCP23017:</strong> I2C GPIO expander library</li>
+        </ul>
+
+        <h2>Testing and Validation Checklist</h2>
+
+        <div class="checklist">
+            <h3>Power System</h3>
+            <ul>
+                <li>Verify all voltage rails under load</li>
+                <li>Test overvoltage protection</li>
+                <li>Validate reverse polarity protection</li>
+                <li>Check power consumption in sleep modes</li>
+            </ul>
+
+            <h3>Communication</h3>
+            <ul>
+                <li>Test all UART interfaces at various baud rates</li>
+                <li>Verify CAN bus communication at 500kbps and 1Mbps</li>
+                <li>Validate I2C communication with all devices</li>
+                <li>Test SPI interfaces with different clock speeds</li>
+            </ul>
+
+            <h3>Sensors and Peripherals</h3>
+            <ul>
+                <li>Calibrate IMU and verify interrupt functionality</li>
+                <li>Test RTC accuracy and battery backup</li>
+                <li>Validate FRAM read/write operations</li>
+                <li>Test I/O expander input/output functionality</li>
+            </ul>
+
+            <h3>Programming and Debug</h3>
+            <ul>
+                <li>Verify automatic flash programming</li>
+                <li>Test debug UART output</li>
+                <li>Validate OTA update capability</li>
+                <li>Check bootloader recovery mechanisms</li>
+            </ul>
+        </div>
+
+        <h2>Notes and Warnings</h2>
+
+        <div class="warning">
+            <strong>IMPORTANT:</strong> The ESP32 will not flash if the following conditions exist:<br>
+            • IO1 (HIGH or LOW)<br>
+            • IO2 (HIGH)<br>
+            • IO3 (HIGH or LOW)<br>
+            • IO12 (HIGH)
+        </div>
+
+        <div class="warning">
+            <strong>DEBUG OUTPUT:</strong> The ESP32 will not show debug messages on startup if IO15 is HIGH (this occurs due to the pull-down used in the speed sensor circuit).
+        </div>
+
+        <div class="warning">
+            <strong>CAN BUS:</strong> Ensure proper termination and ground reference for reliable CAN communication in automotive environment.
+        </div>
+
+        <div class="warning">
+            <strong>POWER:</strong> Always validate input voltage range (9-16V typical) before connecting to vehicle power system.
+        </div>
+
+        <div class="info-box" style="margin-top: 40px; text-align: center;">
+            <strong>This documentation provides the essential information needed for firmware development on the ESP32-CAN ECU Gen2 board.<br>
+            Refer to individual component datasheets for detailed register-level programming information.</strong>
+        </div>
+    </div>
+</body>
+</html>
