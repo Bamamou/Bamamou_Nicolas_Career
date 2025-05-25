@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoMoTech 5.18kWh Lithium Battery Module - Technical Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.5);
+        }
+
+        .section h2 {
+            color: #4a5568;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            position: relative;
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: #764ba2;
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .spec-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .spec-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .spec-label {
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .spec-value {
+            font-size: 1.1rem;
+            color: #2d3748;
+            font-weight: 500;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fed7d7, #feb2b2);
+            border: 2px solid #fc8181;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .warning-box h3 {
+            color: #c53030;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .warning-box h3::before {
+            content: '⚠️';
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .feature-item {
+            background: linear-gradient(135deg, #e6fffa, #b2f5ea);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #38b2ac;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-item::before {
+            content: '✓';
+            color: #38b2ac;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .tech-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .tech-table th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .tech-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .tech-table tr:hover {
+            background-color: #f7fafc;
+        }
+
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .image-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .image-card:hover {
+            transform: scale(1.02);
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .image-card .caption {
+            padding: 15px;
+            font-weight: 500;
+            color: #4a5568;
+            text-align: center;
+        }
+
+        .contact-section {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-align: center;
+        }
+
+        .contact-section h2 {
+            color: white;
+            border-bottom-color: rgba(255,255,255,0.3);
+        }
+
+        .contact-section h2::after {
+            background: white;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .specs-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        .status-green {
+            background-color: #48bb78;
+        }
+
+        .status-orange {
+            background-color: #ed8936;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>EcoMoTech 5.18kWh Lithium Battery Module</h1>
+            <p class="subtitle">Professional Grade Residential Energy Storage Solution</p>
+            <p style="margin-top: 15px; color: rgba(255,255,255,0.8);">14S2P Configuration | Lishen 51Ah NMC Cells | Rack-Mounted Design</p>
+        </header>
+
+        <section class="section">
+            <h2>Product Overview</h2>
+            <p>The EcoMoTech 5.18kWh lithium battery module represents cutting-edge energy storage technology designed specifically for residential Energy Storage Systems (ESS). Built with premium Lishen 51Ah NMC (Nickel Manganese Cobalt) cells in a 14S2P configuration, this module delivers exceptional performance, reliability, and scalability for modern home energy management.</p>
+            
+            <div class="feature-list">
+                <div class="feature-item">Modular Design for Easy Expansion</div>
+                <div class="feature-item">Advanced BMS with Multiple Protection Layers</div>
+                <div class="feature-item">CAN & RS485 Communication Protocols</div>
+                <div class="feature-item">Compatible with Major PCS/Inverter Brands</div>
+                <div class="feature-item">Rack-Mountable 2U Form Factor</div>
+                <div class="feature-item">Premium Lishen NMC Cell Technology</div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Technical Specifications</h2>
+            <div class="specs-grid">
+                <div class="spec-card">
+                    <div class="spec-label">Nominal Capacity</div>
+                    <div class="spec-value highlight">5.18 kWh</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">Nominal Voltage</div>
+                    <div class="spec-value">51.8V (14S Configuration)</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">Cell Configuration</div>
+                    <div class="spec-value">14S2P (28 Cells Total)</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">Cell Type</div>
+                    <div class="spec-value">Lishen 51Ah NMC</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">Usable Capacity</div>
+                    <div class="spec-value">102Ah (14S × 51Ah × 2P)</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">Maximum Discharge Current</div>
+                    <div class="spec-value">100A (Estimated)</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">Maximum Charge Current</div>
+                    <div class="spec-value">50A (Estimated)</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">Operating Voltage Range</div>
+                    <div class="spec-value">42V - 58.8V</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">Form Factor</div>
+                    <div class="spec-value">2U Rack Mount</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">Communication</div>
+                    <div class="spec-value">CAN Bus & RS485</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">Cycle Life</div>
+                    <div class="spec-value">>6000 Cycles @ 80% DOD</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">Parallel Scalability</div>
+                    <div class="spec-value">Up to 10 Modules (51.8kWh)</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Advanced Battery Management System (BMS)</h2>
+            <p>The integrated BMS provides comprehensive protection and monitoring capabilities:</p>
+            
+            <table class="tech-table">
+                <thead>
+                    <tr>
+                        <th>Protection Feature</th>
+                        <th>Function</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Over-Voltage Protection</td>
+                        <td>Prevents cell voltage from exceeding safe limits</td>
+                        <td><span class="status-indicator status-green"></span>Active</td>
+                    </tr>
+                    <tr>
+                        <td>Under-Voltage Protection</td>
+                        <td>Protects against deep discharge damage</td>
+                        <td><span class="status-indicator status-green"></span>Active</td>
+                    </tr>
+                    <tr>
+                        <td>Over-Current Protection</td>
+                        <td>Limits charge/discharge current to safe levels</td>
+                        <td><span class="status-indicator status-green"></span>Active</td>
+                    </tr>
+                    <tr>
+                        <td>Temperature Protection</td>
+                        <td>Monitors and controls operating temperature</td>
+                        <td><span class="status-indicator status-green"></span>Active</td>
+                    </tr>
+                    <tr>
+                        <td>Cell Balancing</td>
+                        <td>Maintains uniform cell voltages</td>
+                        <td><span class="status-indicator status-green"></span>Active</td>
+                    </tr>
+                    <tr>
+                        <td>Short Circuit Protection</td>
+                        <td>Immediate disconnect on fault detection</td>
+                        <td><span class="status-indicator status-green"></span>Active</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="section">
+            <h2>System Architecture & Scalability</h2>
+            <p>The modular design allows for flexible system configurations to meet varying energy storage requirements:</p>
+            
+            <div class="specs-grid">
+                <div class="spec-card">
+                    <div class="spec-label">Single Module</div>
+                    <div class="spec-value">5.18 kWh</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">5 Modules Parallel</div>
+                    <div class="spec-value">25.9 kWh</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">10 Modules Parallel</div>
+                    <div class="spec-value highlight">51.8 kWh</div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <h3>Installation Requirements</h3>
+                <p>Maximum 10 modules can be connected in parallel. Each module requires proper ventilation and must be installed in a temperature-controlled environment (0°C to 45°C). Professional installation by certified technicians is strongly recommended.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Communication & Compatibility</h2>
+            <p>The module features dual communication protocols ensuring broad compatibility:</p>
+            
+            <div class="feature-list">
+                <div class="feature-item">CAN Bus 2.0B Protocol</div>
+                <div class="feature-item">RS485 Modbus RTU</div>
+                <div class="feature-item">SolarEdge Compatible</div>
+                <div class="feature-item">Fronius Compatible</div>
+                <div class="feature-item">SMA Compatible</div>
+                <div class="feature-item">Growatt Compatible</div>
+                <div class="feature-item">Goodwe Compatible</div>
+                <div class="feature-item">Sungrow Compatible</div>
+            </div>
+
+            <h3 style="margin-top: 30px; color: #4a5568;">Connection Interfaces</h3>
+            <div class="specs-grid">
+                <div class="spec-card">
+                    <div class="spec-label">Power Terminals</div>
+                    <div class="spec-value">2× Negative (-) Black Terminals<br>2× Positive (+) Orange Terminals</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">Communication Ports</div>
+                    <div class="spec-value">CAN High/Low<br>RS485 A/B</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">Status Indicators</div>
+                    <div class="spec-value">LED Status Array<br>Digital Display</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Performance Characteristics</h2>
+            <table class="tech-table">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Specification</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Round Trip Efficiency</td>
+                        <td>>95%</td>
+                        <td>DC to DC efficiency</td>
+                    </tr>
+                    <tr>
+                        <td>Self-Discharge Rate</td>
+                        <td><3% per month</td>
+                        <td>At room temperature</td>
+                    </tr>
+                    <tr>
+                        <td>Operating Temperature</td>
+                        <td>-10°C to +50°C</td>
+                        <td>Charge: 0°C to +45°C</td>
+                    </tr>
+                    <tr>
+                        <td>Storage Temperature</td>
+                        <td>-20°C to +60°C</td>
+                        <td>At 50% SOC recommended</td>
+                    </tr>
+                    <tr>
+                        <td>Humidity Range</td>
+                        <td>5% to 95% RH</td>
+                        <td>Non-condensing</td>
+                    </tr>
+                    <tr>
+                        <td>Altitude</td>
+                        <td>Up to 3000m</td>
+                        <td>Derate above 2000m</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="section">
+            <h2>Installation & Maintenance</h2>
+            <h3 style="color: #4a5568; margin-bottom: 15px;">Installation Guidelines</h3>
+            <div class="feature-list">
+                <div class="feature-item">Standard 19" rack mounting</div>
+                <div class="feature-item">Minimum 1U spacing between modules</div>
+                <div class="feature-item">Ambient temperature control required</div>
+                <div class="feature-item">Proper ventilation essential</div>
+                <div class="feature-item">Ground fault protection recommended</div>
+                <div class="feature-item">DC disconnect switch required</div>
+            </div>
+
+            <h3 style="color: #4a5568; margin: 25px 0 15px 0;">Maintenance Schedule</h3>
+            <table class="tech-table">
+                <thead>
+                    <tr>
+                        <th>Interval</th>
+                        <th>Maintenance Task</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Monthly</td>
+                        <td>Visual Inspection</td>
+                        <td>Check for physical damage, LED status</td>
+                    </tr>
+                    <tr>
+                        <td>Quarterly</td>
+                        <td>Connection Check</td>
+                        <td>Verify all connections are secure</td>
+                    </tr>
+                    <tr>
+                        <td>Semi-Annual</td>
+                        <td>Performance Test</td>
+                        <td>Capacity and efficiency verification</td>
+                    </tr>
+                    <tr>
+                        <td>Annual</td>
+                        <td>Comprehensive Service</td>
+                        <td>Full system diagnostics and calibration</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="section">
+            <h2>Safety & Certifications</h2>
+            <div class="specs-grid">
+                <div class="spec-card">
+                    <div class="spec-label">Safety Standards</div>
+                    <div class="spec-value">IEC 62619<br>UN38.3<br>UL 1973</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">EMC Compliance</div>
+                    <div class="spec-value">CE Marking<br>FCC Part 15</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">Quality Management</div>
+                    <div class="spec-value">ISO 9001:2015<br>ISO 14001:2015</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">Fire Safety</div>
+                    <div class="spec-value">UL 9540A<br>IEC 62933</div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <h3>Safety Precautions</h3>
+                <p>Always disconnect AC and DC power before maintenance. Use appropriate PPE. Only qualified personnel should perform installation and service. Keep fire extinguisher rated for electrical fires nearby. Install in well-ventilated area away from heat sources.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Warranty & Support</h2>
+            <div class="specs-grid">
+                <div class="spec-card">
+                    <div class="spec-label">Product Warranty</div>
+                    <div class="spec-value highlight">10 Years</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">Capacity Retention</div>
+                    <div class="spec-value">80% @ 10 Years</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">Cycle Life Warranty</div>
+                    <div class="spec-value">6000 Cycles</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">Technical Support</div>
+                    <div class="spec-value">24/7 Online<br>Remote Diagnostics</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section contact-section">
+            <h2>Contact Information</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div>
+                    <h3>EcoMoTech Co., Ltd.</h3>
+                    <p>Leading Energy Storage Solutions</p>
+                    <p>Manufacturing Base: China</p>
+                </div>
+                <div>
+                    <h3>Technical Support</h3>
+                    <p>Email: ecomotech@outlook.com</p>
+                    <p>Phone: +86-188-1079-9128/p>
+                    <p>Web: www.ecomotech.com</p>
+                </div>
+            </div>
+            <p style="margin-top: 30px; font-size: 0.9rem; opacity: 0.8;">
+                © 2024 EcoMoTech Co., Ltd. All rights reserved. Specifications subject to change without notice.
+            </p>
+        </section>
+    </div>
+</body>
+</html>
