@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Send, MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { Send, MapPin, Phone, Mail, Clock, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -11,6 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
+  DialogFooter,
 } from "@/components/ui/dialog";
 import { CheckCircle2 } from 'lucide-react';
 
@@ -25,6 +26,15 @@ const Contact = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [showScheduleDialog, setShowScheduleDialog] = useState(false);
+  const [showScheduleSuccessDialog, setShowScheduleSuccessDialog] = useState(false);
+  const [scheduleData, setScheduleData] = useState({
+    name: '',
+    email: '',
+    date: '',
+    time: '',
+    topic: '',
+  });
 
   useEffect(() => {
     emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
@@ -74,6 +84,59 @@ const Contact = () => {
       toast({
         title: "Error sending message",
         description: error instanceof Error ? error.message : "Please try again later or contact directly via email.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleScheduleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setScheduleData({ ...scheduleData, [e.target.name]: e.target.value });
+  };
+
+  const handleScheduleSubmit = async () => {
+    setIsSubmitting(true);
+
+    try {
+      const response = await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        {
+          from_name: scheduleData.name,
+          from_email: scheduleData.email,
+          subject: 'Call Schedule Request',
+          message: `
+            Call Schedule Request:
+            Name: ${scheduleData.name}
+            Email: ${scheduleData.email}
+            Date: ${scheduleData.date}
+            Time: ${scheduleData.time}
+            Topic: ${scheduleData.topic}
+          `,
+          to_email: 'bamamounicolas@gmail.com',
+        }
+      );
+
+      if (response.status !== 200) {
+        throw new Error('Failed to send schedule request');
+      }
+
+      setShowScheduleDialog(false);
+      setShowScheduleSuccessDialog(true); // Show success dialog instead of toast
+
+      setScheduleData({
+        name: '',
+        email: '',
+        date: '',
+        time: '',
+        topic: '',
+      });
+    } catch (error) {
+      console.error('Scheduling error:', error);
+      toast({
+        title: "Error scheduling call",
+        description: "Please try again or contact directly via email.",
         variant: "destructive",
       });
     } finally {
@@ -212,7 +275,12 @@ const Contact = () => {
             <div className="bg-accent/10 p-6 rounded-lg">
               <h3 className="text-xl font-bold mb-4">Ready to Work Together?</h3>
               <p className="mb-4">Let's discuss how I can contribute to your next engineering project.</p>
-              <Button className="bg-accent hover:bg-accent/90 w-full">Schedule a Call</Button>
+              <Button 
+                className="bg-accent hover:bg-accent/90 w-full"
+                onClick={() => setShowScheduleDialog(true)}
+              >
+                <Calendar className="mr-2 h-4 w-4" /> Schedule a Call
+              </Button>
             </div>
           </div>
         </div>
@@ -240,6 +308,137 @@ const Contact = () => {
               </p>
             </DialogDescription>
           </DialogHeader>
+        </DialogContent>
+      </Dialog>
+
+      {/* Schedule Dialog */}
+      <Dialog open={showScheduleDialog} onOpenChange={setShowScheduleDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Schedule a Call</DialogTitle>
+            <DialogDescription>
+              Choose a date and time that works best for you.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <label htmlFor="schedule-name" className="font-medium">Your Name</label>
+              <Input
+                id="schedule-name"
+                name="name"
+                placeholder="Your name"
+                value={scheduleData.name}
+                onChange={handleScheduleChange}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="schedule-email" className="font-medium">Your Email</label>
+              <Input
+                id="schedule-email"
+                name="email"
+                type="email"
+                placeholder="your@email.com"
+                value={scheduleData.email}
+                onChange={handleScheduleChange}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="schedule-date" className="font-medium">Preferred Date</label>
+              <Input
+                id="schedule-date"
+                name="date"
+                type="date"
+                min={new Date().toISOString().split('T')[0]}
+                value={scheduleData.date}
+                onChange={handleScheduleChange}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="schedule-time" className="font-medium">Preferred Time</label>
+              <Input
+                id="schedule-time"
+                name="time"
+                type="time"
+                value={scheduleData.time}
+                onChange={handleScheduleChange}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="schedule-topic" className="font-medium">Discussion Topic</label>
+              <Input
+                id="schedule-topic"
+                name="topic"
+                placeholder="Brief description of what you'd like to discuss"
+                value={scheduleData.topic}
+                onChange={handleScheduleChange}
+                required
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              onClick={() => setShowScheduleDialog(false)}
+              variant="outline"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleScheduleSubmit}
+              disabled={isSubmitting}
+              className="bg-primary hover:bg-primary/90"
+            >
+              {isSubmitting ? 'Scheduling...' : 'Schedule Call'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Schedule Success Dialog */}
+      <Dialog 
+        open={showScheduleSuccessDialog} 
+        onOpenChange={setShowScheduleSuccessDialog}
+      >
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 mb-4">
+              <Calendar className="h-8 w-8 text-green-600" />
+            </div>
+            <DialogTitle className="text-center text-xl font-semibold">
+              Call Successfully Scheduled
+            </DialogTitle>
+            <DialogDescription className="text-center mt-4">
+              <p className="text-lg mb-4">
+                Thank you for your interest in connecting, {scheduleData.name.split(' ')[0]}!
+              </p>
+              <div className="bg-secondary/50 p-4 rounded-lg mb-4">
+                <p className="font-medium">Your requested time:</p>
+                <p className="text-primary">
+                  {scheduleData.date}
+                </p>
+                <p className="text-primary">
+                  {scheduleData.time}
+                </p>
+              </div>
+              <p className="text-sm text-muted-foreground mb-2">
+                I will review your request and send a calendar invitation within the next 24 hours.
+              </p>
+              <p className="text-sm text-muted-foreground">
+                If you need to make any changes, please don't hesitate to reach out via email.
+              </p>
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="mt-4">
+            <Button 
+              onClick={() => setShowScheduleSuccessDialog(false)}
+              className="w-full bg-primary hover:bg-primary/90"
+            >
+              Close
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </section>
