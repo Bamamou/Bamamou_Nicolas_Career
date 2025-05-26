@@ -32,3 +32,4 @@ lerna-debug.log*
 # ...existing code...
 .env
 .env*.local
+.vercel
