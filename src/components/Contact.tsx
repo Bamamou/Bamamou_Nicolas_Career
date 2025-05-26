@@ -14,10 +14,6 @@ import {
 } from "@/components/ui/dialog";
 import { CheckCircle2 } from 'lucide-react';
 
-declare const __EMAILJS_SERVICE_ID__: string;
-declare const __EMAILJS_TEMPLATE_ID__: string;
-declare const __EMAILJS_PUBLIC_KEY__: string;
-
 const Contact = () => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
@@ -31,7 +27,7 @@ const Contact = () => {
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
   useEffect(() => {
-    emailjs.init(__EMAILJS_PUBLIC_KEY__);
+    emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -43,9 +39,15 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
+      if (!import.meta.env.VITE_EMAILJS_SERVICE_ID || 
+          !import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 
+          !import.meta.env.VITE_EMAILJS_PUBLIC_KEY) {
+        throw new Error('EmailJS configuration is missing');
+      }
+
       const response = await emailjs.send(
-        __EMAILJS_SERVICE_ID__,
-        __EMAILJS_TEMPLATE_ID__,
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
         {
           from_name: formData.name,
           from_email: formData.email,
