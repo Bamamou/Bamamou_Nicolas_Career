@@ -1,4 +1,4 @@
-import { CarTaxiFront } from 'lucide-react';
+import { Globe } from 'lucide-react';
 import type { Project } from './types';
 
 export const systemIntegration: Project = {
@@ -14,7 +14,7 @@ export const systemIntegration: Project = {
   description: 'Integrated electrical systems for High Speed electric Motorcycles, including ECU, motor controller (MCU) and battery management system, OBC, DC-DC, and other components all connected with a sophisticated wire harness.',
   fullDescription: 'Led the integration of various electrical systems in high-performance electric motorcycles. The project encompassed the complete electrical architecture, from power train to control systems, ensuring optimal performance and reliability.',
   tags: ['MCU', 'ECU/VCU', 'OBC', 'DC-DC', 'BMS', 'HV-Battery', 'EBS/ABS', 'HV-LV Wire Harness', 'Cooling system','Integration', 'Testing'],
-  icon: CarTaxiFront,
+  icon: Globe,
   startDate: 'June 2024',
   duration: '12 months',
   scope: 'Full System Integration',
