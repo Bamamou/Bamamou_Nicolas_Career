@@ -16,7 +16,7 @@ export const ress5kw: Project = {
   icon: Battery,
   startDate: 'May 2023',
   duration: '2 months',
-  scope: 'Full System Design and Implementation of a 5.2kW',
+  scope: 'Full System Design and Implementation of a 5.2kW RBESS',
   role: 'RBESS Engineer',
   responsibilities: [
     'Conducted feasibility studies for residential energy storage',
@@ -52,5 +52,5 @@ export const ress5kw: Project = {
   },
 ],
 
-  technologies: ['Autodesk Fusion 360 / SolidWorks', 'CAD/technical-Drawing', 'Battery Management System (BMS)', 'Fiber laser welding', 'Fast-Bidirectional Charging', 'Battery Pack Design', 'Energy Management System (EMS) / Smart Metering', 'IoT Sensors and Smart Home Integration', 'User Interface Design', 'Renewable Energy Integration and Grid Connection'],
+  technologies: ['Autodesk Fusion 360 / SolidWorks', 'CAD/technical-Drawing', 'Fiber laser welding', 'Battery Pack Design', 'Energy Management System (EMS) / Smart Metering', 'IoT Sensors and Smart Home Integration', 'User Interface Design', 'Renewable Energy Integration and Grid Connection'],
 };
