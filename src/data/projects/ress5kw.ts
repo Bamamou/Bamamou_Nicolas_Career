@@ -1,4 +1,4 @@
-import { Battery } from 'lucide-react';
+import { Battery, FileText, FileSpreadsheet, Code } from 'lucide-react';
 import type { Project } from './types';
 
 export const ress5kw: Project = {
