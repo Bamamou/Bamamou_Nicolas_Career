@@ -15,10 +15,11 @@ export const ress5kw: Project = {
   fullDescription: 'Developed an innovative residential energy storage solution that seamlessly integrates with solar power systems. The project focused on maximizing energy efficiency and providing reliable backup power while maintaining user-friendly operation.',
   tags: ['Battery Energy Storage System', 'Renewable Energy', ' IoT/Smart Home', 'Energy Management', 'Battery Pack Design', 'BMS', 'Smart Metering'],
   icon: Battery,
-  startDate: 'September 2023',
-  duration: '6 months',
-  scope: 'Full System Design and Implementation of a 15kW',
-  role: 'Battery Energy Systems Engineer',
+
+  startDate: 'May 2023',
+  duration: '2 months',
+  scope: 'Full System Design and Implementation of a 5.2kW RBESS',
+  role: 'RBESS Engineer',
   responsibilities: [
     'Conducted feasibility studies for residential energy storage',
     'Analyzed energy consumption patterns',
@@ -40,5 +41,19 @@ export const ress5kw: Project = {
     'Enabled real-time energy usage analytics',
     'Successfully deployed in 5 residential installations'  
   ],
-   technologies: ['Autodesk Fusion 360 / SolidWorks', 'CAD/technical-Drawing', 'Battery Management System (BMS)', 'Fiber laser welding', 'Fast-Bidirectional Charging', 'Battery Pack Design', 'Energy Management System (EMS) / Smart Metering', 'IoT Sensors and Smart Home Integration', 'User Interface Design', 'Renewable Energy Integration and Grid Connection'],
+
+    links: [
+  {
+    title: 'Documentation',
+    url: '../projects/BESS/ecomotech5kw_battery_docs.html',
+    icon: FileText
+  },
+  {
+    title: 'CAD Files',
+    url: 'https://grabcad.com/library/14s2p-bess-1',
+    icon: FileSpreadsheet
+  },
+],
+
+  technologies: ['Autodesk Fusion 360 / SolidWorks', 'CAD/technical-Drawing', 'Fiber laser welding', 'Battery Pack Design', 'Energy Management System (EMS) / Smart Metering', 'IoT Sensors and Smart Home Integration', 'User Interface Design', 'Renewable Energy Integration and Grid Connection'],
 };
