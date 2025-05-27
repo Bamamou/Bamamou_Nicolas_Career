@@ -4,12 +4,11 @@ import type { Project } from './types';
 export const ress5kw: Project = {
   id: 10,
   title: 'Residential Battery Energy Storage (RBESS)',
-  category: 'battery',  image: './images/BESS/BESS 4.png',
+  category: 'battery',  image: './images/BESS/5kW module.png',
   images: [
-    '../images/BESS/BESS 1.png',
-    '../images/BESS/BESS 2.png',
-    '../images/BESS/BESS 3.png',  
-    '../images/BESS/BESS 4.png',
+    '../images/BESS/Battery 5kW module.png',
+    '../images/BESS/5kW module.png',
+    '../images/BESS/5kW ESS.png',  
   ],
   description: '5kW residential battery system designed for optimal energy management with solar integration.',
   fullDescription: 'Developed an innovative residential energy storage solution that seamlessly integrates with solar power systems. The project focused on maximizing energy efficiency and providing reliable backup power while maintaining user-friendly operation.',
