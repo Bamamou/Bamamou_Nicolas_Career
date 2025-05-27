@@ -1,19 +1,21 @@
-import { Battery, BatteryChargingIcon, FileText, FileSpreadsheet } from 'lucide-react';
+import { Battery } from 'lucide-react';
 import type { Project } from './types';
 
 export const ress5kw: Project = {
   id: 10,
   title: 'Residential Battery Energy Storage (RBESS)',
-  category: 'battery',  image: './images/BESS/Battery 5kW module.png',
+  category: 'battery',  image: './images/BESS/BESS 4.png',
   images: [
-    '../images/BESS/Battery 5kW module.png',
-    '../images/BESS/5kW module.png',
-    '../images/BESS/5kW ESS .png',  
+    '../images/BESS/BESS 1.png',
+    '../images/BESS/BESS 2.png',
+    '../images/BESS/BESS 3.png',  
+    '../images/BESS/BESS 4.png',
   ],
   description: '5kW residential battery system designed for optimal energy management with solar integration.',
   fullDescription: 'Developed an innovative residential energy storage solution that seamlessly integrates with solar power systems. The project focused on maximizing energy efficiency and providing reliable backup power while maintaining user-friendly operation.',
   tags: ['Battery Energy Storage System', 'Renewable Energy', ' IoT/Smart Home', 'Energy Management', 'Battery Pack Design', 'BMS', 'Smart Metering'],
   icon: Battery,
+
   startDate: 'May 2023',
   duration: '2 months',
   scope: 'Full System Design and Implementation of a 5.2kW RBESS',
@@ -37,8 +39,9 @@ export const ress5kw: Project = {
     'Implemented remote monitoring and reporting',
     'Ensured compliance with safety standards',
     'Enabled real-time energy usage analytics',
-    'Successfully deployed in 15 residential installations'  
+    'Successfully deployed in 5 residential installations'  
   ],
+
     links: [
   {
     title: 'Documentation',
